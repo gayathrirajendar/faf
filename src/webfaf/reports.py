@@ -648,8 +648,10 @@ def associate_bug(report_id):
 
                 try:
                     bug = tracker.download_bug_to_storage_no_retry(db, bug_id)
+                    print(bug)
                 except Exception as e:
-                    flash("Failed to fetch bug. {0}".format(str(e)), "danger")
+                    print(e)
+                    flash("Failed to fetch bug. Inside Exception {0}".format(str(e)), "danger")
                     raise
 
             if bug:
@@ -663,7 +665,7 @@ def associate_bug(report_id):
                 flash("Bug successfully associated.", "success")
                 return redirect(url_for("reports.item", report_id=report_id))
 
-            flash("Failed to fetch bug.", "danger")
+            flash("Failed to fetch bug. Outside total", "danger")
 
     bthash_url = url_for("reports.bthash_forward",
                          bthash=report.hashes[0].hash,
