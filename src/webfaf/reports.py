@@ -648,9 +648,7 @@ def associate_bug(report_id):
 
                 try:
                     bug = tracker.download_bug_to_storage_no_retry(db, bug_id)
-                    print(bug)
                 except Exception as e:
-                    print(e)
                     flash("Failed to fetch bug. Inside Exception {0}".format(str(e)), "danger")
                     raise
 
