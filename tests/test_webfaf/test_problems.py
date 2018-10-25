@@ -88,7 +88,23 @@ class ProblemsTestCase(WebfafTestCase):
         self.assertIn("kernel", r.data)
 
         r2 = self.app.get("/problems/2/")
+        print("Problem 2 tainted")
         print("problem/2")
+        print(str(r2.data))
+        self.assertIn("Tainted", r2.data)
+
+        self.save_report("tainted_kernel")
+        self.call_action("create-problems")
+
+        r2 = self.app.get("/problems/2/")
+        print("Problem 2 tainted reupload")
+        print("problem/22222")
+        print(str(r2.data))
+        self.assertIn("Tainted", r2.data)
+
+        r2 = self.app.get("/problems/3")
+        print("Problem 3 tainted try")
+        print("problem/22222")
         print(str(r2.data))
         self.assertIn("taint_flags", r2.data)
 
