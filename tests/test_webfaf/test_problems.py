@@ -53,7 +53,7 @@ class ProblemsTestCase(WebfafTestCase):
         """
 
         r = self.app.get("/problems/1/")
-        self.log_error(str(r.data))
+        print(str(r.data))
         self.assertIn("kernel", r.data)
         self.assertIn("NEW", r.data)
         self.assertIn("wl_event_handler", r.data)
@@ -83,13 +83,13 @@ class ProblemsTestCase(WebfafTestCase):
         self.db.session.commit()
 
         r = self.app.get("/problems/1/")
-        self.log_error("problem/1")
-        self.log_error(str(r.data))
+        print("problem/1")
+        print(str(r.data))
         self.assertIn("kernel", r.data)
 
         r2 = self.app.get("/problems/2/")
-        self.log_error("problem/2")
-        self.log_error(str(r2.data))
+        print("problem/2")
+        print(str(r2.data))
         self.assertIn("taint_flags", r2.data)
 
 
