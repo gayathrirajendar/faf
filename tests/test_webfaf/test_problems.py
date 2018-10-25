@@ -53,11 +53,45 @@ class ProblemsTestCase(WebfafTestCase):
         """
 
         r = self.app.get("/problems/1/")
+        self.log_error(str(r.data))
         self.assertIn("kernel", r.data)
         self.assertIn("NEW", r.data)
         self.assertIn("wl_event_handler", r.data)
         self.assertIn("Fedora 20", r.data)
         self.assertIn("0:3.12.10-300.fc20", r.data)
+
+    def test_problem_tainted(self):
+
+        build = Build()
+        build.base_package_name = "kernel"
+        build.epoch = 0
+        build.version = "3.13.10"
+        build.release = "100.fc20"
+        self.db.session.add(build)
+
+        pkg = Package()
+        pkg.build = build
+        pkg.arch = self.arch_x86_64
+        pkg.name = "kernel"
+        self.db.session.add(pkg)
+
+        self.db.session.commit()
+
+        self.save_report("tainted_kernel")
+        self.call_action("create-problems")
+
+        self.db.session.commit()
+
+        r = self.app.get("/problems/1/")
+        self.log_error("problem/1")
+        self.log_error(str(r.data))
+        self.assertIn("kernel", r.data)
+
+        r2 = self.app.get("/problems/2/")
+        self.log_error("problem/2")
+        self.log_error(str(r2.data))
+        self.assertIn("taint_flags", r2.data)
+
 
     def test_problem_version_filter(self):
         """
